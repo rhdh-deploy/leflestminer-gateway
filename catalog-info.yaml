@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: leflestminer-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: leflestminer-poi-gateway-app-dev
+    backstage.io/kubernetes-id: leflestminer-poi-gateway-app
+    backstage.io/kubernetes-namespace: leflestminer
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: rhdh-deploy/leflestminer-gateway
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.a1jxqhzp.eastus2.aroapp.io/dev-pipelines/ns/leflestminer/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.a1jxqhzp.eastus2.aroapp.io/k8s/ns/leflestminer/deployments/leflestminer-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.a1jxqhzp.eastus2.aroapp.io/#https://github.com/rhdh-deploy/leflestminer-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:default/leflestminer"
+  system: workshop-system-leflestminer
+  providesApis:
+    - gateway-api-leflestminer
+  consumesApis:
+    - backend-api-leflestminer
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-leflestminer
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "user:default/leflestminer"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-leflestminer
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: http://leflestminer-poi-gateway-app-leflestminer.apps.a1jxqhzp.eastus2.aroapp.io/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/rhdh-deploy/leflestminer-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:default/leflestminer"
+  system: workshop-system-leflestminer
+  definition:
+    $text: https://github.com/rhdh-deploy/leflestminer-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
